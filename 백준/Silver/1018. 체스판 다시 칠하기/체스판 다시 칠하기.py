@@ -1,28 +1,23 @@
-def getStartStr(start):
-    if (start == "W"):
-        return "WB"*4
-    return "BW"*4
-def diffStr(str_a,str_b):
-    return sum(1 for a, b in zip(str_a, str_b) if a != b)
-min_eraser = 99999
-# broute - force 로 풀기
-N,M = map(int,input().split())
-board = [input() for _ in range(N)]
-# 정사각형 8*8 찾는 반복문
-for col in range(N-7):
-    for row in range(M-7):
-        start = board[col][row]
-        start_char = ["W","B"]
-        now_eraser = [0,0]
-        for plus in range(8):
-            check = board[col+plus][row:row+8]
-            now_eraser[0] += diffStr(check,getStartStr(start_char[0]))
-            now_eraser[1] += diffStr(check,getStartStr(start_char[1]))
-            
-            start_char = start_char[::-1]
-            if (min_eraser < min(now_eraser)):
-                break
-        else:
-            if (min_eraser > min(now_eraser)):
-                min_eraser = min(now_eraser)
-print(min_eraser)
+N, M = map(int, input().split())
+original = [list(input())for _ in range(N)]
+count = []
+def wb(N,M):
+    for a in range(N-7):
+        for b in range(M-7):
+            index1 = 0
+            index2 = 0
+            for i in range(a, a+8):
+                for j in range(b, b+8):
+                    if (i+j) % 2 == 0:
+                        if original[i][j] != 'W':
+                            index1 += 1
+                        if original[i][j] != 'B':
+                            index2 += 1
+                    else:
+                        if original[i][j] != 'B':
+                            index1 += 1
+                        if original[i][j] != 'W':
+                            index2 += 1
+            count.append(min(index1, index2))
+    print(min(count))
+wb(N,M)
